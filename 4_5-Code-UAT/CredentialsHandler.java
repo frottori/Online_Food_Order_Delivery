@@ -7,7 +7,7 @@ public class CredentialsHandler {
     private Connection dbConnection;
     private String url = "jdbc:mysql://localhost:3306/Online_Food_Order_Delivery";
     private String user = "online_food_order_user";
-    private String password = "food";
+    private String password = "Food@12345";
 
     public CredentialsHandler() {
 
@@ -23,7 +23,7 @@ public class CredentialsHandler {
     }
     // Inserts into USER table and returns the generated ID
     private int insertUser(String username, String password, String email, String userType) throws SQLException {
-        String regUserQuery = "INSERT INTO USER(USERNAME, PASSWORD, EMAIL, USER_TYPE) VALUES (?, ?, ?, ?);";
+        String regUserQuery = "INSERT INTO `User`(USERNAME, PASSWORD, EMAIL, USER_TYPE) VALUES (?, ?, ?, ?);";
         PreparedStatement regUserStatement = dbConnection.prepareStatement(regUserQuery, Statement.RETURN_GENERATED_KEYS);
         regUserStatement.setString(1, username);
         regUserStatement.setString(2, password);
@@ -47,7 +47,7 @@ public class CredentialsHandler {
     public Map<String, String> loginUser(String email, String password) {
         Map<String, String> result = new HashMap<>();
         try {
-            String checkQuery = "SELECT ID, USERNAME, USER_TYPE FROM USER WHERE EMAIL = ? AND PASSWORD = ?;";
+            String checkQuery = "SELECT ID, USERNAME, USER_TYPE FROM `User` WHERE EMAIL = ? AND PASSWORD = ?;";
             PreparedStatement preparedStatement = dbConnection.prepareStatement(checkQuery);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
@@ -85,7 +85,7 @@ public class CredentialsHandler {
             // ** Same logic applies for the other registration methods. **
             int userId = insertUser(username, password, email, "Customer");
             if (userId != -1) {
-                String regCustomerQuery = "INSERT INTO CUSTOMER(ID, USERNAME, PASSWORD, ADDRESS) VALUES (?, ?, ?, ?);";
+                String regCustomerQuery = "INSERT INTO Customer(ID, USERNAME, PASSWORD, ADDRESS) VALUES (?, ?, ?, ?);";
                 PreparedStatement regCustomerStatement = dbConnection.prepareStatement(regCustomerQuery);
                 regCustomerStatement.setInt(1, userId);
                 regCustomerStatement.setString(2, username);
@@ -128,7 +128,7 @@ public class CredentialsHandler {
 
             int userId = insertUser(username, password, email, "Driver");
             if (userId != -1) {
-                String regDriverQuery = "INSERT INTO DRIVER(ID, USERNAME, PASSWORD, PHONE_NUMBER) VALUES (?, ?, ?, ?);";
+                String regDriverQuery = "INSERT INTO Driver(ID, USERNAME, PASSWORD, PHONE_NUMBER) VALUES (?, ?, ?, ?);";
                 PreparedStatement regDriverStatement = dbConnection.prepareStatement(regDriverQuery);
                 regDriverStatement.setInt(1, userId);
                 regDriverStatement.setString(2, username);
@@ -171,7 +171,7 @@ public class CredentialsHandler {
 
             int userId = insertUser(username, password, email, "Restaurant");
             if (userId != -1) {
-                String regRestaurantQuery = "INSERT INTO RESTAURANT(ID, USERNAME, PASSWORD, NAME, CUISINE_TYPE, LOCATION) VALUES (?, ?, ?, ?, ?, ?);";
+                String regRestaurantQuery = "INSERT INTO Restaurant(ID, USERNAME, PASSWORD, NAME, CUISINE_TYPE, LOCATION) VALUES (?, ?, ?, ?, ?, ?);";
                 PreparedStatement regRestaurantStatement = dbConnection.prepareStatement(regRestaurantQuery);
                 regRestaurantStatement.setInt(1, userId);
                 regRestaurantStatement.setString(2, username);
@@ -244,7 +244,7 @@ public class CredentialsHandler {
     }
 
     public boolean checkExisting(String email) throws SQLException {
-        String checkQuery = "SELECT * FROM USER WHERE EMAIL = ?";
+        String checkQuery = "SELECT * FROM `User` WHERE EMAIL = ?";
         PreparedStatement checkAlreadyExisting = dbConnection.prepareStatement(checkQuery);
         checkAlreadyExisting.setString(1, email);
 
